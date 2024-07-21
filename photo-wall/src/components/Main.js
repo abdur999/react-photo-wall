@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import { Route } from "react-router-dom"
 
 //These import are for class component
 
@@ -81,7 +82,8 @@ class Main extends Component {
 		}
 		//Without use this it will be broken, we don't have access to the removePhoto function 
 		this.removePhoto = this.removePhoto.bind(this)
-		this.navigate = this.navigate.bind(this)
+		//binding in constructor not needed when you use route tag
+		// this.navigate = this.navigate.bind(this)
 	}
 	removePhoto(postRemoved) {
 		console.log(postRemoved.description)
@@ -89,11 +91,12 @@ class Main extends Component {
 			posts: state.posts.filter(post => post !== postRemoved)
 		}))
 	}
-	navigate() {
-		this.setState({
-			screen: "addPhoto" 
-		})
-	}
+	//When routing through route tag this function not needed any more
+	// navigate() {
+	// 	this.setState({
+	// 		screen: "addPhoto"
+	// 	})
+	// }
 	//after all the elements of the page have been rendered correctly
 	componentDidMount() {
 		const data = SimpulateFetchDataFromDb()
@@ -112,25 +115,17 @@ class Main extends Component {
 	}
 
 	render() {
-		return <div>
-			{
-			this.state.screen === 'photos' && (
-			
-			<div>
-			<FTitle mytitle={"Photo Wall : "} />
-			<FPhotoWall posts={this.state.posts} onRemovePhoto={this.removePhoto} onNavigate={this.navigate}/>
-			</div>
-			)
-			}
-			{
-			this.state.screen === 'addPhoto' && (	
-			<div>
-				<AddPhoto />
-			</div>
-			)
-			}
-			
-		</div>
+		return (<div>
+				<Route exact path="/" render={() => (
+
+					<div>
+						<FTitle mytitle={"Photo Wall : "} />
+						<FPhotoWall posts={this.state.posts} onRemovePhoto={this.removePhoto} onNavigate={this.navigate} />
+					</div>
+				)} />
+				<Route path="/AddPhoto" component= {AddPhoto}/>
+				
+		</div>)
 	}
 
 
@@ -159,5 +154,23 @@ function SimpulateFetchDataFromDb() {
 	}
 }
 
+//This code was previously placed in render method
+// {
+	// this.state.screen === 'photos' && (
+
+	// <div>
+	// <FTitle mytitle={"Photo Wall : "} />
+	// <FPhotoWall posts={this.state.posts} onRemovePhoto={this.removePhoto} onNavigate={this.navigate}/>
+	// </div>
+	// )
+	// }
+	// {
+	// this.state.screen === 'addPhoto' && (	
+	// <div>
+	// 	<AddPhoto />
+	// </div>
+	// )
+	// }
 
 export default Main
+
