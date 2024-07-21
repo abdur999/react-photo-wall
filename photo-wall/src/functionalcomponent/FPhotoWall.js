@@ -10,7 +10,11 @@ function FPhotoWall(props) {
         {/* <button onClick={props.onNavigate} className="addIcon">  +  </button> */}
         <Link className="addIcon"  to="/AddPhoto"> Click Me </Link>
         <div className="photoGrid">
-            {props.posts.map((post, index) => <FPhoto key={index} post={post} onRemovePhoto={props.onRemovePhoto} />)}
+            {props.posts
+            .sort(function(x,y){
+                return y.id - x.id
+            })
+            .map((post, index) => <FPhoto key={index} post={post} onRemovePhoto={props.onRemovePhoto} />)}
         </div>
     </div>
 }
